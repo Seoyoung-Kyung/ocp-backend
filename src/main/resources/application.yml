@@ -1,0 +1,130 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: ocp_finalproject
+  task:
+    scheduling:
+      pool:
+        size: 5
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/ocpdb?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8
+    username: ${MYSQL_USER:ocpuser}
+    password: ${MYSQL_PASSWORD:ocp1234}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # 세션 쿠키 설정 (OAuth2 로그인 시 쿠키 전송을 위해 필수)
+  session:
+    cookie:
+      same-site: lax    # localhost 환경에서는 lax로 충분 (같은 도메인)
+      secure: false     # 개발 환경(HTTP)에서는 false, 프로덕션(HTTPS)에서는 true
+      http-only: true   # JavaScript에서 쿠키 접근 방지 (보안)
+      path: /
+      max-age: 1800     # 30분
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - email
+              - profile
+          naver:
+            client-id: ${NAVER_CLIENT_ID}
+            client-secret: ${NAVER_CLIENT_SECRET}
+            client-name: Naver
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - name
+              - email
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-authentication-method: client_secret_post
+            scope:
+              - profile_nickname
+              - account_email
+        provider:
+          naver:
+            authorization-uri: https://nid.naver.com/oauth2.0/authorize
+            token-uri: https://nid.naver.com/oauth2.0/token
+            user-info-uri: https://openapi.naver.com/v1/nid/me
+            user-name-attribute: response
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+oauth2:
+  redirect:
+    #    success-url: http://localhost:8080/api/v1/auth/me
+    #    failure-url: http://localhost:8080/login/failure
+    success-url: http://localhost:5173/oauth2/callback
+    failure-url: http://localhost:5173/oauth2/callback
+
+airflow:
+  log:
+    base-path: airflow/logs
+  api:
+    base-url: ${AIRFLOW_BASE_URL:http://localhost:8081}
+    username: ${AIRFLOW_USERNAME:airflow}
+    password: ${AIRFLOW_PASSWORD:airflow}
+
+
+app:
+  rabbit:
+    queue:
+      content-request: content-request-queue
+      blog-upload: blog-upload-queue
+  crypto:
+    secret-key: KTS6DfyMVsGGCrtWuStqn5zxKTm9TlrEPANvBKOzmYE=
+
+blog-upload:
+  webhook-secret: ${BLOG_UPLOAD_WEBHOOK_SECRET:local-dev-secret}
+  webhook-url: ${BLOG_UPLOAD_WEBHOOK_URL:http://localhost:8080/api/v1/work/blog/webhook}
+
+keyword-select:
+  webhook-secret: ${KEYWORD_SELECT_WEBHOOK_SECRET:local-dev-secret}
+  webhook-url: ${KEYWORD_SELECT_WEBHOOK_URL:http://host.docker.internal:8080/api/v1/work/keyword/webhook}
+
+product-select:
+  webhook-secret: ${PRODUCT_SELECT_WEBHOOK_SECRET:local-dev-secret}
+  webhook-url: ${PRODUCT_SELECT_WEBHOOK_URL:http://host.docker.internal:8080/api/v1/work/product/webhook}
+
+content-generate:
+  webhook-secret: ${CONTENT_GENERATE_WEBHOOK_SECRET:local-dev-secret}
+  webhook-url: ${CONTENT_GENERATE_WEBHOOK_URL:http://host.docker.internal:8080/api/v1/work/content/webhook}
+
+airflow-log:
+  webhook-secret: ${AIRFLOW_LOG_WEBHOOK_SECRET:local-dev-secret}
+  webhook-url: ${AIRFLOW_LOG_WEBHOOK_URL:http://host.docker.internal:8080/api/v1/webhook/airflow/logs}
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.data.jpa: DEBUG
+    org.hibernate.SQL: DEBUG

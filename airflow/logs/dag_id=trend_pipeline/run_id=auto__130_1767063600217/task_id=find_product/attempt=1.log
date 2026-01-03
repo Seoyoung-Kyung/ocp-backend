@@ -1,0 +1,178 @@
+[2025-12-30T03:01:34.608+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-30T03:01:34.635+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: trend_pipeline.find_product auto__130_1767063600217 [queued]>
+[2025-12-30T03:01:34.652+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: trend_pipeline.find_product auto__130_1767063600217 [queued]>
+[2025-12-30T03:01:34.653+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 3
+[2025-12-30T03:01:34.664+0000] {taskinstance.py:2888} INFO - Executing <Task(PythonOperator): find_product> on 2025-12-30 03:00:01.079284+00:00
+[2025-12-30T03:01:34.690+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=1242) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-12-30T03:01:34.698+0000] {standard_task_runner.py:72} INFO - Started process 1244 to run task
+[2025-12-30T03:01:34.703+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'trend_pipeline', 'find_product', 'auto__130_1767063600217', '--job-id', '38', '--raw', '--subdir', 'DAGS_FOLDER/trend_pipeline.py', '--cfg-path', '/tmp/tmpsthn6znu']
+[2025-12-30T03:01:34.714+0000] {standard_task_runner.py:105} INFO - Job 38: Subtask find_product
+[2025-12-30T03:01:34.815+0000] {task_command.py:467} INFO - Running <TaskInstance: trend_pipeline.find_product auto__130_1767063600217 [running]> on host 5580cc714497
+[2025-12-30T03:01:34.900+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='trend-bot' AIRFLOW_CTX_DAG_ID='trend_pipeline' AIRFLOW_CTX_TASK_ID='find_product' AIRFLOW_CTX_EXECUTION_DATE='2025-12-30T03:00:01.079284+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='auto__130_1767063600217'
+[2025-12-30T03:01:34.902+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-12-30T03:01:34.917+0000] {trend_pipeline.py:242} INFO - URL 기반 상품 검색 중...
+[2025-12-30T03:01:34.932+0000] {refiner.py:66} INFO - 🔧 URL 정제 시작: https://www.29cm.co.kr + '캐시미어니트'
+[2025-12-30T03:01:34.933+0000] {refiner.py:82} INFO - ✅ 29CM 패턴 사용
+[2025-12-30T03:01:34.933+0000] {refiner.py:92} INFO - 🎯 정제 완료: https://shop.29cm.co.kr/search?keyword=%EC%BA%90%EC%8B%9C%EB%AF%B8%EC%96%B4%EB%8B%88%ED%8A%B8
+[2025-12-30T03:01:34.935+0000] {product_history.py:175} INFO - 📚 기존 상품 URL 64개 로드됨
+[2025-12-30T03:01:34.936+0000] {driver_factory.py:42} INFO - Chrome WebDriver 시작중...
+[2025-12-30T03:01:36.082+0000] {logging_mixin.py:190} INFO - 초기 방문: https://product.29cm.co.kr/
+[2025-12-30T03:01:37.672+0000] {logging_mixin.py:190} INFO - ⏰ 봇 탐지 우회를 위해 15-20초 대기 중...
+[2025-12-30T03:01:55.479+0000] {logging_mixin.py:190} INFO - 상품 URL 랜덤 선택 시작: 캐시미어니트
+[2025-12-30T03:03:21.878+0000] {job.py:229} INFO - Heartbeat recovered after 18.56 seconds
+[2025-12-30T03:03:40.486+0000] {job.py:229} INFO - Heartbeat recovered after 22.57 seconds
+[2025-12-30T03:03:42.669+0000] {logging_mixin.py:190} INFO - 시도 1/3 실패: Message: script timeout
+  (Session info: chrome=143.0.7499.169)
+Stacktrace:
+#0 0xaaaae048f578 <unknown>
+#1 0xaaaadfe962a8 <unknown>
+#2 0xaaaadff1b45c <unknown>
+#3 0xaaaadff1a780 <unknown>
+#4 0xaaaadfed37ec <unknown>
+#5 0xaaaae045ad8c <unknown>
+#6 0xaaaae045dd74 <unknown>
+#7 0xaaaae045d958 <unknown>
+#8 0xaaaae04459b0 <unknown>
+#9 0xaaaae045e3f0 <unknown>
+#10 0xaaaae042eed4 <unknown>
+#11 0xaaaae047cd40 <unknown>
+#12 0xaaaae047cf48 <unknown>
+#13 0xaaaae048e9b0 <unknown>
+#14 0xffffa656ee2c <unknown>
+#15 0xffffa65d7ad8 <unknown>
+[2025-12-30T03:03:42.981+0000] {logging_mixin.py:190} INFO - 📸 에러 스크린샷 저장: debug_screenshots/error_20251230_030342_attempt1.png
+[2025-12-30T03:03:43.245+0000] {logging_mixin.py:190} INFO - 📄 페이지 HTML 저장: debug_screenshots/error_20251230_030342_attempt1.html
+[2025-12-30T03:05:01.852+0000] {logging_mixin.py:190} INFO - 시도 2/3 실패: Message: tab crashed
+  (Session info: chrome=143.0.7499.169)
+[2025-12-30T03:05:01.924+0000] {logging_mixin.py:190} INFO - 스크린샷 저장 실패: Message: tab crashed
+  (Session info: chrome=143.0.7499.169)
+[2025-12-30T03:05:03.948+0000] {logging_mixin.py:190} INFO - 시도 3/3 실패: Message: tab crashed
+  (Session info: chrome=143.0.7499.169)
+[2025-12-30T03:05:03.955+0000] {logging_mixin.py:190} INFO - 스크린샷 저장 실패: Message: tab crashed
+  (Session info: chrome=143.0.7499.169)
+[2025-12-30T03:05:04.167+0000] {logging_mixin.py:190} INFO - ✅ 드라이버 종료 완료
+[2025-12-30T03:05:04.172+0000] {taskinstance.py:3310} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/trend_pipeline.py", line 260, in run_product_finder
+    result = finder.find(
+             ^^^^^^^^^^^^
+  File "/opt/airflow/ai_module/product_finder/finder.py", line 89, in find
+    selected = selector.select_product(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/ai_module/product_finder/product_scraper/selenium_product_selector.py", line 87, in select_product
+    self.driver_factory.natural_goto(search_url)
+  File "/opt/airflow/ai_module/product_finder/product_scraper/selenium_driver_factory.py", line 42, in natural_goto
+    self.driver.get(url)
+  File "/home/airflow/.local/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 452, in get
+    self.execute(Command.GET, {"url": url})
+  File "/home/airflow/.local/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 432, in execute
+    self.error_handler.check_response(response)
+  File "/home/airflow/.local/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: tab crashed
+  (Session info: chrome=143.0.7499.169)
+
+[2025-12-30T03:05:04.253+0000] {taskinstance.py:1225} INFO - Marking task as UP_FOR_RETRY. dag_id=trend_pipeline, task_id=find_product, run_id=auto__130_1767063600217, execution_date=20251230T030001, start_date=20251230T030134, end_date=20251230T030504
+[2025-12-30T03:05:04.287+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-12-30T03:05:04.290+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 38 for task find_product (Message: tab crashed
+  (Session info: chrome=143.0.7499.169)
+; 1244)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 115, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3004, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 273, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3158, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3182, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/trend_pipeline.py", line 260, in run_product_finder
+    result = finder.find(
+             ^^^^^^^^^^^^
+  File "/opt/airflow/ai_module/product_finder/finder.py", line 89, in find
+    selected = selector.select_product(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/ai_module/product_finder/product_scraper/selenium_product_selector.py", line 87, in select_product
+    self.driver_factory.natural_goto(search_url)
+  File "/opt/airflow/ai_module/product_finder/product_scraper/selenium_driver_factory.py", line 42, in natural_goto
+    self.driver.get(url)
+  File "/home/airflow/.local/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 452, in get
+    self.execute(Command.GET, {"url": url})
+  File "/home/airflow/.local/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py", line 432, in execute
+    self.error_handler.check_response(response)
+  File "/home/airflow/.local/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: tab crashed
+  (Session info: chrome=143.0.7499.169)
+
+[2025-12-30T03:05:04.352+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2025-12-30T03:05:04.407+0000] {taskinstance.py:3900} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-12-30T03:05:04.408+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

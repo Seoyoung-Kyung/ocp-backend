@@ -1,0 +1,3 @@
+[console_scripts]
+blog-upload-module = blog_upload_module.run_posting:run_cli
+blog-worker = blog_worker.run_worker:main

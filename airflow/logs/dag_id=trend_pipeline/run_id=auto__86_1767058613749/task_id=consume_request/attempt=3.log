@@ -1,0 +1,132 @@
+[2025-12-30T01:47:01.801+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-30T01:47:01.823+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: trend_pipeline.consume_request auto__86_1767058613749 [queued]>
+[2025-12-30T01:47:01.832+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: trend_pipeline.consume_request auto__86_1767058613749 [queued]>
+[2025-12-30T01:47:01.833+0000] {taskinstance.py:2865} INFO - Starting attempt 3 of 3
+[2025-12-30T01:47:01.844+0000] {taskinstance.py:2888} INFO - Executing <Task(PythonOperator): consume_request> on 2025-12-30 01:36:54.098229+00:00
+[2025-12-30T01:47:01.868+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=81) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-12-30T01:47:01.870+0000] {standard_task_runner.py:72} INFO - Started process 83 to run task
+[2025-12-30T01:47:01.871+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'trend_pipeline', 'consume_request', 'auto__86_1767058613749', '--job-id', '12', '--raw', '--subdir', 'DAGS_FOLDER/trend_pipeline.py', '--cfg-path', '/tmp/tmpjrd748ub']
+[2025-12-30T01:47:01.876+0000] {standard_task_runner.py:105} INFO - Job 12: Subtask consume_request
+[2025-12-30T01:47:01.952+0000] {task_command.py:467} INFO - Running <TaskInstance: trend_pipeline.consume_request auto__86_1767058613749 [running]> on host 5580cc714497
+[2025-12-30T01:47:02.027+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='trend-bot' AIRFLOW_CTX_DAG_ID='trend_pipeline' AIRFLOW_CTX_TASK_ID='consume_request' AIRFLOW_CTX_EXECUTION_DATE='2025-12-30T01:36:54.098229+00:00' AIRFLOW_CTX_TRY_NUMBER='3' AIRFLOW_CTX_DAG_RUN_ID='auto__86_1767058613749'
+[2025-12-30T01:47:02.029+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-12-30T01:47:02.054+0000] {trend_pipeline.py:34} INFO - 요청 수신 중...
+[2025-12-30T01:47:02.075+0000] {connection_workflow.py:179} INFO - Pika version 1.3.2 connecting to ('::1', 5672, 0, 0)
+[2025-12-30T01:47:02.076+0000] {io_services_utils.py:349} ERROR - Socket failed to connect: <socket.socket fd=93, family=10, type=1, proto=6, laddr=('::1', 43806, 0, 0)>; error=111 (Connection refused)
+[2025-12-30T01:47:02.076+0000] {connection_workflow.py:375} ERROR - TCP Connection attempt failed: ConnectionRefusedError(111, 'Connection refused'); dest=(10, 1, 6, '', ('::1', 5672, 0, 0))
+[2025-12-30T01:47:02.076+0000] {connection_workflow.py:291} ERROR - AMQPConnector - reporting failure: AMQPConnectorSocketConnectError: ConnectionRefusedError(111, 'Connection refused')
+[2025-12-30T01:47:02.077+0000] {connection_workflow.py:179} INFO - Pika version 1.3.2 connecting to ('127.0.0.1', 5672)
+[2025-12-30T01:47:02.077+0000] {io_services_utils.py:349} ERROR - Socket failed to connect: <socket.socket fd=93, family=2, type=1, proto=6, laddr=('127.0.0.1', 38914)>; error=111 (Connection refused)
+[2025-12-30T01:47:02.078+0000] {connection_workflow.py:375} ERROR - TCP Connection attempt failed: ConnectionRefusedError(111, 'Connection refused'); dest=(2, 1, 6, '', ('127.0.0.1', 5672))
+[2025-12-30T01:47:02.078+0000] {connection_workflow.py:291} ERROR - AMQPConnector - reporting failure: AMQPConnectorSocketConnectError: ConnectionRefusedError(111, 'Connection refused')
+[2025-12-30T01:47:02.078+0000] {connection_workflow.py:746} ERROR - AMQP connection workflow failed: AMQPConnectionWorkflowFailed: 2 exceptions in all; last exception - AMQPConnectorSocketConnectError: ConnectionRefusedError(111, 'Connection refused'); first exception - AMQPConnectorSocketConnectError: ConnectionRefusedError(111, 'Connection refused').
+[2025-12-30T01:47:02.079+0000] {connection_workflow.py:723} ERROR - AMQPConnectionWorkflow - reporting failure: AMQPConnectionWorkflowFailed: 2 exceptions in all; last exception - AMQPConnectorSocketConnectError: ConnectionRefusedError(111, 'Connection refused'); first exception - AMQPConnectorSocketConnectError: ConnectionRefusedError(111, 'Connection refused')
+[2025-12-30T01:47:02.079+0000] {blocking_connection.py:450} ERROR - Connection workflow failed: AMQPConnectionWorkflowFailed: 2 exceptions in all; last exception - AMQPConnectorSocketConnectError: ConnectionRefusedError(111, 'Connection refused'); first exception - AMQPConnectorSocketConnectError: ConnectionRefusedError(111, 'Connection refused')
+[2025-12-30T01:47:02.079+0000] {blocking_connection.py:457} ERROR - Error in _create_connection().
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/pika/adapters/blocking_connection.py", line 451, in _create_connection
+    raise self._reap_last_connection_workflow_error(error)
+pika.exceptions.AMQPConnectionError
+[2025-12-30T01:47:02.081+0000] {taskinstance.py:3310} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/trend_pipeline.py", line 38, in consume_request
+    connection = pika.BlockingConnection(pika.URLParameters(url))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pika/adapters/blocking_connection.py", line 360, in __init__
+    self._impl = self._create_connection(parameters, _impl_class)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pika/adapters/blocking_connection.py", line 451, in _create_connection
+    raise self._reap_last_connection_workflow_error(error)
+pika.exceptions.AMQPConnectionError
+[2025-12-30T01:47:02.090+0000] {taskinstance.py:1225} INFO - Marking task as FAILED. dag_id=trend_pipeline, task_id=consume_request, run_id=auto__86_1767058613749, execution_date=20251230T013654, start_date=20251230T014701, end_date=20251230T014702
+[2025-12-30T01:47:02.107+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-12-30T01:47:02.107+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 12 for task consume_request (; 83)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 115, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3004, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 273, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3158, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3182, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/trend_pipeline.py", line 38, in consume_request
+    connection = pika.BlockingConnection(pika.URLParameters(url))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pika/adapters/blocking_connection.py", line 360, in __init__
+    self._impl = self._create_connection(parameters, _impl_class)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pika/adapters/blocking_connection.py", line 451, in _create_connection
+    raise self._reap_last_connection_workflow_error(error)
+pika.exceptions.AMQPConnectionError
+[2025-12-30T01:47:02.137+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2025-12-30T01:47:02.169+0000] {taskinstance.py:3900} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-12-30T01:47:02.173+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

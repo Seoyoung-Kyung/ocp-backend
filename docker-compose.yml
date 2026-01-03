@@ -1,0 +1,303 @@
+
+version: '3.8'
+
+services:
+  # ------------------------------
+  # 서비스용 MySQL
+  # ------------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: ocp-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: ocpdb
+      MYSQL_USER: ocpuser
+      MYSQL_PASSWORD: ocp1234
+      TZ: Asia/Seoul
+      LANG: C.UTF-8
+    command: [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_unicode_ci",
+      "--default-authentication-plugin=mysql_native_password",
+      "--skip-character-set-client-handshake"
+    ]
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    restart: unless-stopped
+
+  # ------------------------------
+  # 서비스용 RabbitMQ
+  # ------------------------------
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ocp-rabbitmq
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # 관리 UI (http://localhost:15672)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq/
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    restart: unless-stopped
+
+  # ------------------------------
+  # Content Worker (RabbitMQ Consumer)
+  # ------------------------------
+  content-worker:
+    build:
+      context: ./ai_module
+      dockerfile: Dockerfile
+    container_name: ocp-content-worker
+    depends_on:
+      - rabbitmq
+      - mysql
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+      RABBITMQ_CONTENT_QUEUE: content-generate-queue
+      RABBITMQ_PREFETCH: 1
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ocpdb
+      MYSQL_USER: ocpuser
+      MYSQL_PASSWORD: ocp1234
+      PYTHONPATH: /app
+    volumes:
+      - ./ai_module:/app
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    restart: unless-stopped
+
+  # ------------------------------
+  # Redis (Airflow Celery broker)
+  # ------------------------------
+  redis:
+    image: redis:7
+    container_name: ocp-redis
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    restart: unless-stopped
+
+  # ------------------------------
+  # PostgreSQL (Airflow Metadata DB)
+  # ------------------------------
+  postgres:
+    image: postgres:13
+    container_name: airflow-postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    restart: unless-stopped
+
+  # ------------------------------
+  # Airflow Webserver
+  # ------------------------------
+  airflow-webserver:
+    build:
+      context: ./airflow
+    container_name: airflow-webserver
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__FERNET_KEY: ""
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.basic_auth
+      PYTHONPATH: /opt/airflow/dags:/opt/airflow/ai_module
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./ai_module:/opt/airflow/ai_module
+    ports:
+      - "8081:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    command: webserver
+    restart: unless-stopped
+
+  # ------------------------------
+  # Airflow Scheduler
+  # ------------------------------
+  airflow-scheduler:
+    build:
+      context: ./airflow
+    container_name: airflow-scheduler
+    depends_on:
+      - airflow-webserver
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.basic_auth
+      PYTHONPATH: /opt/airflow/dags:/opt/airflow/ai_module
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./ai_module:/opt/airflow/ai_module
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+        reservations:
+          memory: 192M
+    command: scheduler
+    restart: unless-stopped
+
+  # ------------------------------
+  # Airflow Worker
+  # ------------------------------
+  airflow-worker:
+    build:
+      context: ./airflow
+    container_name: airflow-worker
+    depends_on:
+      - airflow-scheduler
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.basic_auth
+      PYTHONPATH: /opt/airflow/dags:/opt/airflow/ai_module
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./ai_module:/opt/airflow/ai_module
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 384M
+    command: celery worker
+    restart: unless-stopped
+
+  # ------------------------------
+  # Airflow Triggerer (메모리 절감을 위해 비활성화)
+  # ------------------------------
+  # airflow-triggerer:
+  #   build:
+  #     context: ./airflow
+  #   container_name: airflow-triggerer
+  #   depends_on:
+  #     - airflow-scheduler
+  #   environment:
+  #     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+  #     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+  #     AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.basic_auth
+  #     PYTHONPATH: /opt/airflow/dags:/opt/airflow/ai_module
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./ai_module:/opt/airflow/ai_module
+  #   command: triggerer
+  #   restart: unless-stopped
+
+  # ------------------------------
+  # Airflow Flower (메모리 절감을 위해 비활성화)
+  # ------------------------------
+  # airflow-flower:
+  #   build:
+  #     context: ./airflow
+  #   container_name: airflow-flower
+  #   depends_on:
+  #     - airflow-worker
+  #   environment:
+  #     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+  #     AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+  #     AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.basic_auth
+  #     PYTHONPATH: /opt/airflow/dags:/opt/airflow/ai_module
+  #   volumes:
+  #     - ./ai_module:/opt/airflow/ai_module
+  #   ports:
+  #     - "5555:5555"
+  #   command: celery flower
+  #   restart: unless-stopped
+
+  # ------------------------------
+  # Airflow 초기화
+  # ------------------------------
+  airflow-init:
+    build:
+      context: ./airflow
+    container_name: airflow-init
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__API__AUTH_BACKEND: airflow.api.auth.backend.basic_auth
+      PYTHONPATH: /opt/airflow/dags:/opt/airflow/ai_module
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./ai_module:/opt/airflow/ai_module
+    # Airflow DB 초기화 + Admin 생성
+    command: >
+      bash -c "
+      airflow db init &&
+      airflow users create
+      --username admin
+      --password admin
+      --firstname Air
+      --lastname Flow
+      --role Admin
+      --email admin@example.com
+      "
+    restart: "no"
+
+volumes:
+  mysql-data:
+  rabbitmq-data:
+  postgres-data:

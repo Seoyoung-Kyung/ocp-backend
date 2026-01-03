@@ -1,0 +1,30 @@
+[2025-12-30T03:00:10.592+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-30T03:00:10.605+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: trend_pipeline.run_crawler auto__130_1767063600217 [queued]>
+[2025-12-30T03:00:10.611+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: trend_pipeline.run_crawler auto__130_1767063600217 [queued]>
+[2025-12-30T03:00:10.611+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 3
+[2025-12-30T03:00:10.623+0000] {taskinstance.py:2888} INFO - Executing <Task(PythonOperator): run_crawler> on 2025-12-30 03:00:01.079284+00:00
+[2025-12-30T03:00:10.640+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=1089) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-12-30T03:00:10.643+0000] {standard_task_runner.py:72} INFO - Started process 1091 to run task
+[2025-12-30T03:00:10.643+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'trend_pipeline', 'run_crawler', 'auto__130_1767063600217', '--job-id', '34', '--raw', '--subdir', 'DAGS_FOLDER/trend_pipeline.py', '--cfg-path', '/tmp/tmpg6fy16n5']
+[2025-12-30T03:00:10.647+0000] {standard_task_runner.py:105} INFO - Job 34: Subtask run_crawler
+[2025-12-30T03:00:10.715+0000] {task_command.py:467} INFO - Running <TaskInstance: trend_pipeline.run_crawler auto__130_1767063600217 [running]> on host 5580cc714497
+[2025-12-30T03:00:10.799+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='trend-bot' AIRFLOW_CTX_DAG_ID='trend_pipeline' AIRFLOW_CTX_TASK_ID='run_crawler' AIRFLOW_CTX_EXECUTION_DATE='2025-12-30T03:00:01.079284+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='auto__130_1767063600217'
+[2025-12-30T03:00:10.802+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-12-30T03:00:10.819+0000] {trend_pipeline.py:55} INFO - 트렌드 키워드 크롤링 시작...
+[2025-12-30T03:00:10.829+0000] {driver_factory.py:42} INFO - Chrome WebDriver 시작중...
+[2025-12-30T03:00:14.973+0000] {category_service.py:67} INFO - Itemscout 페이지 접속
+[2025-12-30T03:00:18.209+0000] {selenium_actions.py:57} INFO - 카테고리 '1차 카테고리' 선택 → 패션의류
+[2025-12-30T03:00:34.923+0000] {selenium_actions.py:85} INFO - 1차 카테고리 선택 완료
+[2025-12-30T03:00:37.006+0000] {selenium_actions.py:57} INFO - 카테고리 '2차 카테고리' 선택 → 여성의류
+[2025-12-30T03:00:53.547+0000] {selenium_actions.py:85} INFO - 2차 카테고리 선택 완료
+[2025-12-30T03:00:55.810+0000] {selenium_actions.py:57} INFO - 카테고리 '3차 카테고리' 선택 → 니트/스웨터
+[2025-12-30T03:01:16.023+0000] {selenium_actions.py:85} INFO - 3차 카테고리 선택 완료
+[2025-12-30T03:01:18.683+0000] {extractors.py:130} INFO - 키워드 50개 추출됨
+[2025-12-30T03:01:19.026+0000] {python.py:240} INFO - Done. Returned value was: ['노르딕니트', '여성니트', '니트', '캐시미어니트', '브이넥니트', '앙고라니트', '니트/스웨터', '에고이스트니트', '시슬리니트', '베네통니트', '올리브데올리브니트', '잇미샤니트', '오프숄더니트', '후드니트', '온앤온니트', '쉬즈미스니트', '리스트니트', '지컷니트', '듀엘니트', '유니클로캐시미어니트', '폴로니트', '아가일니트', '캐시미어100니트', '홀가먼트니트', '보브니트', '크롭니트', '올리비아로렌니트', '나이스클랍니트', '여성목폴라니트', '여성목폴라', '고비캐시미어', '니트티', '롱니트', '크리스마스니트', '여성니트티', '여자니트', '레드니트', 'jj지고트니트', '씨씨콜렉트니트', '스팽글니트', '쥬크니트', '지고트니트', '겨울니트', '여성터틀넥니트', '샤틴니트', '핑크니트', '꽈배기니트', '제시뉴욕니트', '반목니트', '가니니트']
+[2025-12-30T03:01:19.066+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-12-30T03:01:19.067+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=trend_pipeline, task_id=run_crawler, run_id=auto__130_1767063600217, execution_date=20251230T030001, start_date=20251230T030010, end_date=20251230T030119
+[2025-12-30T03:01:19.133+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-12-30T03:01:19.196+0000] {taskinstance.py:3900} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-12-30T03:01:19.197+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

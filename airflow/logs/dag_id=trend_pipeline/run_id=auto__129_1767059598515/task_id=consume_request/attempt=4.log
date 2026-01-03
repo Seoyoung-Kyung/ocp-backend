@@ -1,0 +1,39 @@
+[2025-12-30T02:05:05.445+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-12-30T02:05:05.457+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: trend_pipeline.consume_request auto__129_1767059598515 [queued]>
+[2025-12-30T02:05:05.462+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: trend_pipeline.consume_request auto__129_1767059598515 [queued]>
+[2025-12-30T02:05:05.462+0000] {taskinstance.py:2865} INFO - Starting attempt 4 of 4
+[2025-12-30T02:05:05.472+0000] {taskinstance.py:2888} INFO - Executing <Task(PythonOperator): consume_request> on 2025-12-30 01:53:18.801516+00:00
+[2025-12-30T02:05:05.482+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=261) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-12-30T02:05:05.484+0000] {standard_task_runner.py:72} INFO - Started process 263 to run task
+[2025-12-30T02:05:05.486+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'trend_pipeline', 'consume_request', 'auto__129_1767059598515', '--job-id', '23', '--raw', '--subdir', 'DAGS_FOLDER/trend_pipeline.py', '--cfg-path', '/tmp/tmpf9htuleh']
+[2025-12-30T02:05:05.494+0000] {standard_task_runner.py:105} INFO - Job 23: Subtask consume_request
+[2025-12-30T02:05:05.546+0000] {task_command.py:467} INFO - Running <TaskInstance: trend_pipeline.consume_request auto__129_1767059598515 [running]> on host 5580cc714497
+[2025-12-30T02:05:05.631+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='trend-bot' AIRFLOW_CTX_DAG_ID='trend_pipeline' AIRFLOW_CTX_TASK_ID='consume_request' AIRFLOW_CTX_EXECUTION_DATE='2025-12-30T01:53:18.801516+00:00' AIRFLOW_CTX_TRY_NUMBER='4' AIRFLOW_CTX_DAG_RUN_ID='auto__129_1767059598515'
+[2025-12-30T02:05:05.632+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-12-30T02:05:05.646+0000] {trend_pipeline.py:34} INFO - 요청 수신 중...
+[2025-12-30T02:05:05.658+0000] {connection_workflow.py:179} INFO - Pika version 1.3.2 connecting to ('172.18.0.7', 5672)
+[2025-12-30T02:05:05.659+0000] {io_services_utils.py:345} INFO - Socket connected: <socket.socket fd=93, family=2, type=1, proto=6, laddr=('172.18.0.8', 57952), raddr=('172.18.0.7', 5672)>
+[2025-12-30T02:05:05.662+0000] {connection_workflow.py:428} INFO - Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0xffff8c8f9220>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0xffff8c8f9220> params=<URLParameters host=ocp-rabbitmq port=5672 virtual_host=/ ssl=False>>).
+[2025-12-30T02:05:05.672+0000] {connection_workflow.py:293} INFO - AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0xffff8c8f9220> params=<URLParameters host=ocp-rabbitmq port=5672 virtual_host=/ ssl=False>>
+[2025-12-30T02:05:05.673+0000] {connection_workflow.py:725} INFO - AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0xffff8c8f9220> params=<URLParameters host=ocp-rabbitmq port=5672 virtual_host=/ ssl=False>>
+[2025-12-30T02:05:05.673+0000] {blocking_connection.py:453} INFO - Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0xffff8c8f9220> params=<URLParameters host=ocp-rabbitmq port=5672 virtual_host=/ ssl=False>>
+[2025-12-30T02:05:05.674+0000] {blocking_connection.py:1264} INFO - Created channel=1
+[2025-12-30T02:05:05.678+0000] {blocking_connection.py:802} INFO - Closing connection (200): Normal shutdown
+[2025-12-30T02:05:05.679+0000] {channel.py:536} INFO - Closing channel (200): 'Normal shutdown' on <Channel number=1 OPEN conn=<SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0xffff8c8f9220> params=<URLParameters host=ocp-rabbitmq port=5672 virtual_host=/ ssl=False>>>
+[2025-12-30T02:05:05.680+0000] {channel.py:1133} INFO - Received <Channel.CloseOk> on <Channel number=1 CLOSING conn=<SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0xffff8c8f9220> params=<URLParameters host=ocp-rabbitmq port=5672 virtual_host=/ ssl=False>>>
+[2025-12-30T02:05:05.681+0000] {connection.py:1316} INFO - Closing connection (200): 'Normal shutdown'
+[2025-12-30T02:05:05.682+0000] {io_services_utils.py:731} INFO - Aborting transport connection: state=1; <socket.socket fd=93, family=2, type=1, proto=6, laddr=('172.18.0.8', 57952), raddr=('172.18.0.7', 5672)>
+[2025-12-30T02:05:05.683+0000] {io_services_utils.py:904} INFO - _AsyncTransportBase._initate_abort(): Initiating abrupt asynchronous transport shutdown: state=1; error=None; <socket.socket fd=93, family=2, type=1, proto=6, laddr=('172.18.0.8', 57952), raddr=('172.18.0.7', 5672)>
+[2025-12-30T02:05:05.683+0000] {io_services_utils.py:869} INFO - Deactivating transport: state=1; <socket.socket fd=93, family=2, type=1, proto=6, laddr=('172.18.0.8', 57952), raddr=('172.18.0.7', 5672)>
+[2025-12-30T02:05:05.684+0000] {connection.py:2017} INFO - AMQP stack terminated, failed to connect, or aborted: opened=True, error-arg=None; pending-error=ConnectionClosedByClient: (200) 'Normal shutdown'
+[2025-12-30T02:05:05.684+0000] {connection.py:2086} INFO - Stack terminated due to ConnectionClosedByClient: (200) 'Normal shutdown'
+[2025-12-30T02:05:05.684+0000] {io_services_utils.py:882} INFO - Closing transport socket and unlinking: state=3; <socket.socket fd=93, family=2, type=1, proto=6, laddr=('172.18.0.8', 57952), raddr=('172.18.0.7', 5672)>
+[2025-12-30T02:05:05.684+0000] {blocking_connection.py:525} INFO - User-initiated close: result=(<SelectConnection CLOSED transport=None params=<URLParameters host=ocp-rabbitmq port=5672 virtual_host=/ ssl=False>>, ConnectionClosedByClient: (200) 'Normal shutdown')
+[2025-12-30T02:05:05.701+0000] {python.py:240} INFO - Done. Returned value was: None
+[2025-12-30T02:05:05.711+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-12-30T02:05:05.712+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=trend_pipeline, task_id=consume_request, run_id=auto__129_1767059598515, execution_date=20251230T015318, start_date=20251230T020505, end_date=20251230T020505
+[2025-12-30T02:05:05.748+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-12-30T02:05:05.778+0000] {taskinstance.py:3900} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-12-30T02:05:05.779+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
