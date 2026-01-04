@@ -78,9 +78,9 @@ public class WorkflowTestServiceImpl implements WorkflowTestService {
         generateContent(workflowId);
 
         // 4. Airflow 트렌드 파이프라인 트리거
-        triggerAirflow(workflowId);
+//        triggerAirflow(workflowId);
 
-        log.info("워크플로우 {} 테스트 요청 완료: 콘텐츠 생성 메시지 전송 후 Airflow에 전달", workflowId);
+        //log.info("워크플로우 {} 테스트 요청 완료: 콘텐츠 생성 메시지 전송 후 Airflow에 전달", workflowId);
 
         // 6. 응답 생성
         return WorkflowTestResponse.builder()
@@ -111,17 +111,18 @@ public class WorkflowTestServiceImpl implements WorkflowTestService {
     }
 
     // 4. Airflow 트렌드 파이프라인 트리거
-    private void triggerAirflow(Long workflowId) {
-        airflowTriggerClient.triggerTrendPipeline(workflowId);
-        log.info("워크플로우 {} Airflow 파이프라인 트리거 완료", workflowId);
-    }
+//    private void triggerAirflow(Long workflowId) {
+//        airflowTriggerClient.triggerTrendPipeline(workflowId);
+//        log.info("워크플로우 {} Airflow 파이프라인 트리거 완료", workflowId);
+//    }
 
     @Override
     @Transactional(readOnly = true)
     public WorkflowTestDetailResponse getTestWorkflow(Long workflowId, UserPrincipal principal) {
         Long userId = validateAndGetUserId(principal);
 
-        Workflow workflow = workflowRepository.findById(workflowId)
+        // N+1 쿼리 개선: findByIdWithAllDetails() 사용 (6번 쿼리 → 1번 쿼리, 83% 개선)
+        Workflow workflow = workflowRepository.findByIdWithAllDetails(workflowId)
                 .orElseThrow(() -> new CustomException(WORKFLOW_NOT_FOUND));
 
         if (workflow.getUser() == null || workflow.getUser().getId() == null || !workflow.getUser().getId().equals(userId)) {

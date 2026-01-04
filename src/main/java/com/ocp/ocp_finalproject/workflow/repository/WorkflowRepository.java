@@ -112,4 +112,21 @@ public interface WorkflowRepository extends JpaRepository<Workflow, Long> {
     """)
     List<Workflow> findStaleTestWorkflows(@Param("threshold") LocalDateTime threshold);
 
+    /**
+     * N+1 쿼리 개선: Workflow 상세 조회 (User, UserBlog, BlogType, TrendCategory, RecurrenceRule 함께 로딩)
+     * 사용처: WorkflowTestServiceImpl.getTestWorkflow()
+     * 개선: 6번 쿼리 → 1번 쿼리 (83% 개선)
+     */
+    @Query("""
+        SELECT wf
+        FROM Workflow wf
+        JOIN FETCH wf.user u
+        JOIN FETCH wf.userBlog ub
+        LEFT JOIN FETCH ub.blogType bt
+        JOIN FETCH wf.trendCategory tc
+        LEFT JOIN FETCH wf.recurrenceRule rr
+        WHERE wf.id = :workflowId
+    """)
+    Optional<Workflow> findByIdWithAllDetails(@Param("workflowId") Long workflowId);
+
 }

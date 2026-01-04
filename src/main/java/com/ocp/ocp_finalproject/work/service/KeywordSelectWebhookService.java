@@ -32,7 +32,8 @@ public class KeywordSelectWebhookService {
             throw new CustomException(ErrorCode.WORK_NOT_FOUND, "워크 ID가 누락되었습니다.");
         }
 
-        Work work = workRepository.findById(workId)
+        // N+1 쿼리 개선: findByIdWithWorkflow() 사용 (2번 쿼리 → 1번 쿼리, 50% 개선)
+        Work work = workRepository.findByIdWithWorkflow(workId)
                 .orElseThrow(() -> new CustomException(ErrorCode.WORK_NOT_FOUND, "워크를 찾을 수 없습니다. workId=" + workId));
 
         AiContent ai = aiContentRepository.findByWorkId(workId)

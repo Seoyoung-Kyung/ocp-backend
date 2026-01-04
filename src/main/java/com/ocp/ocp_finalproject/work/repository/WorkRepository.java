@@ -34,7 +34,8 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
             @Param("status") WorkExecutionStatus status
     );
 
-    Page<Work> findByWorkflowId(Long workflowId, Pageable pageable);
+    // N+1 쿼리 발생으로 findByWorkflowIdWithAiContent()로 대체
+    // Page<Work> findByWorkflowId(Long workflowId, Pageable pageable);
 
     @Query("""
         SELECT w
@@ -74,5 +75,46 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
     Page<Work> findAllForAdmin(Pageable pageable);
 
     Optional<Work> findTopByWorkflowIdOrderByCreatedAtDesc(Long workflowId);
+
+    /**
+     * N+1 쿼리 개선: Work 상세 조회 (Workflow, User, AiContent 함께 로딩)
+     * 사용처: WorkService.getWork()
+     * 개선: 4번 쿼리 → 1번 쿼리 (75% 개선)
+     */
+    @Query("""
+        SELECT w
+        FROM Work w
+        JOIN FETCH w.workflow wf
+        JOIN FETCH wf.user u
+        LEFT JOIN FETCH w.aiContent ac
+        WHERE w.id = :workId
+    """)
+    Optional<Work> findByIdWithDetails(@Param("workId") Long workId);
+
+    /**
+     * N+1 쿼리 개선: Work 리스트 조회 (AiContent 함께 로딩)
+     * 사용처: WorkService.getWorks()
+     * 개선: 2번 쿼리 → 1번 쿼리 (50% 개선)
+     */
+    @Query("""
+        SELECT w
+        FROM Work w
+        LEFT JOIN FETCH w.aiContent ac
+        WHERE w.workflow.id = :workflowId
+    """)
+    Page<Work> findByWorkflowIdWithAiContent(@Param("workflowId") Long workflowId, Pageable pageable);
+
+    /**
+     * N+1 쿼리 개선: Work 조회 (Workflow 함께 로딩)
+     * 사용처: Webhook Services (KeywordSelectWebhookService, ContentGenerateWebhookService, ProductSelectWebhookService)
+     * 개선: 2번 쿼리 → 1번 쿼리 (50% 개선)
+     */
+    @Query("""
+        SELECT w
+        FROM Work w
+        JOIN FETCH w.workflow wf
+        WHERE w.id = :workId
+    """)
+    Optional<Work> findByIdWithWorkflow(@Param("workId") Long workId);
 
 }

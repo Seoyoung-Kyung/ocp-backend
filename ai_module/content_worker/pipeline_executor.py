@@ -294,6 +294,8 @@ def select_keyword(
         if isinstance(kw, str)
     ]
 
+    logger.info(f"🔍 제외할 최근 키워드 ({len(exclude_keywords)}개): {exclude_keywords}")
+
     api_key = os.environ.get("OPENAI_API_KEY")
     result = select_best_keyword(
         keywords,

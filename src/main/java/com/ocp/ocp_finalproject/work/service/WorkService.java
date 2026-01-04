@@ -47,17 +47,17 @@ public class WorkService {
         validateWorkflowOwner(workflow, userId);
 
         PageRequest pageable = PageRequest.of(page, DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Work> workPage = workRepository.findByWorkflowId(workflowId, pageable);
+        // N+1 쿼리 개선: findByWorkflowIdWithAiContent() 사용 (2번 쿼리 → 1번 쿼리, 50% 개선)
+        Page<Work> workPage = workRepository.findByWorkflowIdWithAiContent(workflowId, pageable);
         List<Work> works = workPage.getContent();
 
-        Map<Long, String> choiceProductByWorkId = fetchChoiceProductMap(works);
-
+        // N+1 쿼리 개선: AiContent가 이미 로드되어 있으므로 fetchChoiceProductMap() 제거
         List<WorkListResponse> responses = works.stream()
                 .map(work -> WorkListResponse.builder()
                         .workId(work.getId())
                         .postingUrl(work.getPostingUrl())
                         .completedAt(work.getCompletedAt())
-                        .choiceProduct(choiceProductByWorkId.get(work.getId()))
+                        .choiceProduct(work.getAiContent() != null ? work.getAiContent().getChoiceProduct() : null)
                         .failureReason(work.getFailureReason())
                         .status(work.getStatus() != null ? work.getStatus().name() : null)
                         .build())
@@ -76,7 +76,8 @@ public class WorkService {
     @Transactional(readOnly = true)
     public WorkResponse getWork(Long userId, Long workId) {
 
-        Work work = workRepository.findById(workId)
+        // N+1 쿼리 개선: findByIdWithDetails() 사용 (4번 쿼리 → 1번 쿼리, 75% 개선)
+        Work work = workRepository.findByIdWithDetails(workId)
                 .orElseThrow(() -> new CustomException(WORK_NOT_FOUND));
 
         if (!work.getWorkflow().getUser().getId().equals(userId)) {
