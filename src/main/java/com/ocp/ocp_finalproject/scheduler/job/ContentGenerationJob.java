@@ -29,10 +29,10 @@ public class ContentGenerationJob implements Job {
         ContentGenerateRequest request = contentGenerateService.createRequest(workflowId);
         ContentGenerateRequest prepared = contentGenerateService.applyWebhookSettings(request);
         contentGenerateProducer.send(prepared);
-        log.info("워크 {} 콘텐트 생성 메시지 전송", prepared.getWorkId());
+        log.info("워크 {} 콘텐트 생성 메시지 전송 (Python worker 사용)", prepared.getWorkId());
 
-        // workId로 트리거 & dagRunId 받기
-        String dagRunId = airflowTriggerClient.triggerTrendPipeline(prepared.getWorkId());
-        log.info("스케줄 실행 - workId: {}, dagRunId: {}", prepared.getWorkId(), dagRunId);
+        // Airflow 대신 Python worker 사용으로 변경됨 - Airflow 트리거 비활성화
+        // String dagRunId = airflowTriggerClient.triggerTrendPipeline(prepared.getWorkId());
+        // log.info("스케줄 실행 - workId: {}, dagRunId: {}", prepared.getWorkId(), dagRunId);
     }
 }

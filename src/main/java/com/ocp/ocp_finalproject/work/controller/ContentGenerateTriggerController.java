@@ -31,8 +31,8 @@ public class ContentGenerateTriggerController {
         contentGenerateProducer.send(request);
 
         // workId로 트리거 & dagRunId 받기
-        String dagRunId = airflowTriggerClient.triggerTrendPipeline(request.getWorkId());
-        log.info("Airflow DAG 트리거 완료 - workId: {}, dagRunId: {}", request.getWorkId(), dagRunId);
+//        String dagRunId = airflowTriggerClient.triggerTrendPipeline(request.getWorkId());
+//        log.info("Airflow DAG 트리거 완료 - workId: {}, dagRunId: {}", request.getWorkId(), dagRunId);
 
         return ResponseEntity.ok(ApiResult.success("콘텐츠 생성 요청을 전송했습니다."));
     }
