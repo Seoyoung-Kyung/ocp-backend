@@ -33,4 +33,7 @@ public class BlogUploadWebhookRequest {
 
     @JsonProperty("isTest")
     private Boolean isTest;
+
+    private String workerLogs;
+
 }

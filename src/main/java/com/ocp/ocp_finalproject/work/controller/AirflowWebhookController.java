@@ -23,14 +23,14 @@ public class AirflowWebhookController {
     public ResponseEntity<ApiResult<Void>> collectLogs(
             @RequestBody AirflowLogRequest request
     ) {
-        log.info("Airflow 로그 수집 요청 - workId: {}, dagId: {}, runId: {}",
-                request.getWorkId(), request.getDagId(), request.getRunId());
-
-        logCollectorService.collectAndSaveLogs(
-                request.getWorkId(),
-                request.getDagId(),
-                request.getRunId()
-        );
+//        log.info("Airflow 로그 수집 요청 - workId: {}, dagId: {}, runId: {}",
+//                request.getWorkId(), request.getDagId(), request.getRunId());
+//
+//        logCollectorService.collectAndSaveLogs(
+//                request.getWorkId(),
+//                request.getDagId(),
+//                request.getRunId()
+//        );
 
         return ResponseEntity.ok(ApiResult.success("로그 수집 완료", null));
     }
